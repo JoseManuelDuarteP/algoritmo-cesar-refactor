@@ -16,59 +16,89 @@ public class CaesarCipher {
     
     private static final int ALPHABET_LENGTH = 26;
     
-    private static class Letters {
+    private static class LetterASCIICodes {
         static final int A = 65;
         static final int Z = 90;
         static final int a = 97;
         static final int z = 122;
     }
-    
-    private static boolean isUpperCaseLetterOutOfRange(int charCode, int shift) {
-        return charCode >= Letters.A && charCode <= Letters.Z && 
-               (charCode + shift > Letters.Z || charCode - shift < Letters.A);
+
+    private static boolean isUpperCaseLetterOutOfRange(int charCode, int cipherDisplacement) {
+        if (charCode >= LetterASCIICodes.A && charCode <= LetterASCIICodes.Z) {
+
+            if (charCode + cipherDisplacement > LetterASCIICodes.Z || charCode - cipherDisplacement < LetterASCIICodes.A) {
+                return true;
+            }
+            return false;
+
+        }
+        return true;
     }
     
-    private static boolean isLowerCaseOutOfRange(int charCode, int shift) {
-        return charCode >= Letters.a && charCode <= Letters.z && 
-               (charCode + shift > Letters.z || charCode - shift < Letters.a);
+    private static boolean isLowerCaseOutOfRange(int charCode, int cipherDisplacement) {
+        if (charCode >= LetterASCIICodes.a && charCode <= LetterASCIICodes.z) {
+
+            if (charCode + cipherDisplacement > LetterASCIICodes.z || charCode - cipherDisplacement < LetterASCIICodes.a) {
+                return true;
+            }
+            return false;
+
+        }
+        return true;
     }
     
-    private static boolean isOutOfAlphabet(int charCode, int shift) {
-        return isUpperCaseLetterOutOfRange(charCode, shift) || 
-               isLowerCaseOutOfRange(charCode, shift);
+    private static boolean isOutOfAlphabet(int charCode, int cipherDisplacement) {
+        return isUpperCaseLetterOutOfRange(charCode, cipherDisplacement) ||
+               isLowerCaseOutOfRange(charCode, cipherDisplacement);
     }
-    
-    public static String cipher(String text, int shift) {
+
+    public static String cipher(String text, int cipherDisplacement) {
         StringBuilder cipher = new StringBuilder();
-        char newCharToAddToCipher;
-        int shiftToApply, currentChar;
-        shift = shift % ALPHABET_LENGTH;
+        char cipheredLetter;
+        int displacementToApply, currentChar;
+        cipherDisplacement = cipherDisplacement % ALPHABET_LENGTH;
         
         for (int i = 0; i < text.length(); i++) {
-            currentChar = (int) text.charAt(i);
-            shiftToApply = isOutOfAlphabet(currentChar, shift) ? 
-                          shift - ALPHABET_LENGTH : shift;
-            newCharToAddToCipher = (char) (currentChar + shiftToApply);
-            cipher.append(newCharToAddToCipher);
+            currentChar = text.charAt(i);
+
+            if (isOutOfAlphabet(currentChar, cipherDisplacement)) {
+                displacementToApply = cipherDisplacement - ALPHABET_LENGTH;
+            } else {
+                displacementToApply = cipherDisplacement;
+            }
+
+            cipheredLetter = (char) (currentChar + displacementToApply);
+            cipher.append(cipheredLetter);
         }
         return cipher.toString();
     }
     
-    public static String decipher(String text, int shift) {
+    public static String decipher(String text, int cipherDisplacement) {
         StringBuilder decipher = new StringBuilder();
-        char newCharToAddToDecipher;
-        int shiftToApply, currentChar;
-        shift = -shift % ALPHABET_LENGTH;
+        char cipheredLetter;
+        int displacementToApply, currentChar;
+        cipherDisplacement = -cipherDisplacement % ALPHABET_LENGTH;
         
         for (int i = 0; i < text.length(); i++) {
-            currentChar = (int) text.charAt(i);
-            shiftToApply = isOutOfAlphabet(currentChar, shift) ? 
-                          shift + ALPHABET_LENGTH : shift;
-            newCharToAddToDecipher = (char) (currentChar + shiftToApply);
-            decipher.append(newCharToAddToDecipher);
+            currentChar = text.charAt(i);
+
+            if (isOutOfAlphabet(currentChar, cipherDisplacement)) {
+                displacementToApply = cipherDisplacement + ALPHABET_LENGTH;
+            } else {
+                displacementToApply = cipherDisplacement;
+            }
+
+            cipheredLetter = (char) (currentChar + displacementToApply);
+            decipher.append(cipheredLetter);
         }
         return decipher.toString();
     }
+
+    /* Quería comentar que viendo que tanto cifrar como descifrar tienen una lógica idéntica solo
+    diferenciada por el operador del for se me ocurrió sacar el for a otro método que operara de x
+    manera según un parámetro que se le pasara. Pero sabiendo que este tipo de cifrado sería muy
+    raro que cambiara me pareció un nivel innecesario de abstracción.
+    */
     
     public static void main(String[] args) {
         // Test 1
