@@ -96,8 +96,9 @@ public class CaesarCipher {
 
     /* Quería comentar que viendo que tanto cifrar como descifrar tienen una lógica idéntica solo
     diferenciada por el operador del for se me ocurrió sacar el for a otro método que operara de x
-    manera según un parámetro que se le pasara. Pero sabiendo que este tipo de cifrado sería muy
-    raro que cambiara me pareció un nivel innecesario de abstracción.
+    manera según un parámetro que se le pasara. O incluso fusionar ambos métodos en uno universal y
+    que cifrara o descifrara dependiendo de si el valor es positivo o negativo. Pero sabiendo que 
+    este tipo de cifrado sería muy raro que cambiara me pareció un nivel innecesario de abstracción.
     */
     
     public static void main(String[] args) {
