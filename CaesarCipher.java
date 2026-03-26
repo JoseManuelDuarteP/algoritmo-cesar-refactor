@@ -15,7 +15,7 @@ según lo visto en la sesión de Clean Code
 import static java.lang.Character.*;
 
 public class CaesarCipher {
-    
+
     private static final int ALPHABET_LENGTH = 26;
 
     private static char spaceHandler(char currentChar, int cipherDisplacement) {
